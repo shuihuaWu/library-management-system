@@ -49,10 +49,16 @@ const RegisterForm = () => {
 
       const supabase = createBrowserSupabaseClient();
       
-      // 注册用户
+      // 注册用户 - 添加用户名作为元数据，以便触发器可以使用
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
+        options: {
+          data: {
+            // 将用户名作为元数据传递，触发器可以使用它
+            username: data.username
+          }
+        }
       });
 
       if (authError) {
@@ -60,26 +66,8 @@ const RegisterForm = () => {
         return;
       }
 
-      // 如果注册成功，创建用户档案
-      if (authData.user) {
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert({
-            id: authData.user.id,
-            username: data.username,
-            role: 'user',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          });
-
-        if (profileError) {
-          console.error('创建用户档案失败', profileError);
-          setServerError('创建用户档案失败');
-          return;
-        }
-      }
-
       // 注册成功，重定向到登录页面
+      // 不再尝试手动创建 profiles 记录，这由数据库触发器自动完成
       router.push('/auth/login?registered=true');
     } catch (error) {
       console.error('注册失败', error);
