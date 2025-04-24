@@ -25,8 +25,7 @@ interface AuthorPageProps {
 }
 
 export async function generateMetadata({ params }: AuthorPageProps) {
-  const resolvedParams = await params;
-  const id = resolvedParams.id;
+  const id = params.id;
   const supabase = createServerClient();
   
   const { data: author } = await supabase
@@ -41,8 +40,7 @@ export async function generateMetadata({ params }: AuthorPageProps) {
 }
 
 const AuthorPage = async ({ params }: AuthorPageProps) => {
-  const resolvedParams = await params;
-  const id = resolvedParams.id;
+  const id = params.id;
   const supabase = createServerClient();
   
   // 获取作者信息
@@ -57,7 +55,7 @@ const AuthorPage = async ({ params }: AuthorPageProps) => {
   }
 
   // 获取该作者的所有图书
-  const { data: books, error: booksError } = await supabase
+  const { data: books } = await supabase
     .from('books')
     .select('id, title, isbn, publisher, publication_date, status')
     .eq('author_id', id)

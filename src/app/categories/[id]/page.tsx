@@ -29,8 +29,7 @@ interface CategoryPageProps {
 }
 
 export async function generateMetadata({ params }: CategoryPageProps) {
-  const resolvedParams = await params;
-  const id = resolvedParams.id;
+  const id = params.id;
   const supabase = createServerClient();
   
   const { data: category } = await supabase
@@ -45,8 +44,7 @@ export async function generateMetadata({ params }: CategoryPageProps) {
 }
 
 const CategoryPage = async ({ params }: CategoryPageProps) => {
-  const resolvedParams = await params;
-  const id = resolvedParams.id;
+  const id = params.id;
   const supabase = createServerClient();
   
   // 获取分类信息
@@ -61,7 +59,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
   }
 
   // 获取该分类的所有图书
-  const { data: books, error: booksError } = await supabase
+  const { data: books } = await supabase
     .from('books')
     .select(`
       id, 
