@@ -82,6 +82,9 @@ pnpm dev
 
 访问 [http://localhost:3000](http://localhost:3000) 查看应用。
 
+试用地址：
+https://library-management-system-nine-fawn.vercel.app/
+
 ## 部署
 
 本项目可以部署到 Vercel、Netlify 等平台，详细部署指南请参考各平台文档。
