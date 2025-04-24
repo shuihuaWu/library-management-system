@@ -25,7 +25,6 @@ export async function generateMetadata({ params }: BorrowRecordPageProps) {
 const BorrowRecordPage = async ({ params }: BorrowRecordPageProps) => {
   const resolvedParams = await params;
   const id = resolvedParams.id;
-  console.log('借阅记录ID:', id); // 调试日志
   
   const supabase = createServerClient();
   
@@ -55,7 +54,6 @@ const BorrowRecordPage = async ({ params }: BorrowRecordPageProps) => {
   // 修改查询方式，使用与BorrowRecordList组件相同的方式获取数据
   // 获取指定用户信息，而不是所有用户
   let user = null; // 确保在使用前定义user变量
-  console.log('准备查询用户信息，借阅记录用户ID:', borrowRecord.user_id);
   
   // 清理用户ID（去除可能的空格）
   const cleanUserId = borrowRecord.user_id.trim();
@@ -66,8 +64,6 @@ const BorrowRecordPage = async ({ params }: BorrowRecordPageProps) => {
     .select('id, username')
     .in('id', [borrowRecord.user_id, cleanUserId]); // 同时查询原始ID和清理后的ID
   
-  console.log('用户查询结果:', users ? `成功获取${users.length}条记录` : '无数据', 
-              '错误:', profilesError ? JSON.stringify(profilesError) : '无');
 
   if (profilesError) {
     console.error('获取用户信息失败:', profilesError);
@@ -76,7 +72,6 @@ const BorrowRecordPage = async ({ params }: BorrowRecordPageProps) => {
   // 使用映射表存储用户ID和用户名的对应关系
   const userMap = new Map();
   if (users && users.length > 0) {
-    console.log(`找到 ${users.length} 个匹配用户`);
     
     users.forEach(profile => {
       if (profile && profile.id) {
@@ -88,7 +83,6 @@ const BorrowRecordPage = async ({ params }: BorrowRecordPageProps) => {
     
     // 检查我们要查找的用户ID是否在映射表中
     const username = userMap.get(cleanUserId) || userMap.get(borrowRecord.user_id);
-    console.log('从映射表中查找用户:', borrowRecord.user_id, '清理后ID:', cleanUserId, '结果:', username);
     
     if (username) {
       user = { id: cleanUserId, username };

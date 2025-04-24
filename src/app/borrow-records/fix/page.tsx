@@ -145,7 +145,6 @@ const FixBorrowRecordsPage = () => {
       // 如果记录存在空格问题，但没有选择新用户，则使用清理后的ID
       if (record.id_has_spaces && (!userId || userId === '')) {
         userId = record.clean_user_id;
-        console.log('使用清理后的ID进行修复:', userId);
       }
       
       if (!userId) {

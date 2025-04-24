@@ -51,14 +51,6 @@ const EditBookPage = async ({ params }: EditBookPageProps) => {
     notFound();
   }
 
-  console.log('服务器端获取的图书数据:', {
-    id: book.id,
-    title: book.title,
-    author_id: book.author_id,
-    author: book.author,
-    category_id: book.category_id,
-    category: book.category
-  });
 
   const bookData = {
     ...book,
