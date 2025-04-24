@@ -8,13 +8,16 @@ import { z } from 'zod';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { createBrowserSupabaseClient } from '@/lib/supabase';
+import { UserRole } from '@/lib/types';
 
+// 注册表单验证模式
 const registerSchema = z
   .object({
     username: z.string().min(2, '用户名至少需要2个字符'),
     email: z.string().email('请输入有效的电子邮箱地址'),
     password: z.string().min(6, '密码至少需要6个字符'),
     confirmPassword: z.string().min(6, '确认密码至少需要6个字符'),
+    role: z.enum(['admin', 'user']).default('user'), // 添加角色字段
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: '两次输入的密码不一致',
@@ -39,6 +42,7 @@ const RegisterForm = () => {
       email: '',
       password: '',
       confirmPassword: '',
+      role: 'user', // 默认为普通用户
     },
   });
 
@@ -49,14 +53,15 @@ const RegisterForm = () => {
 
       const supabase = createBrowserSupabaseClient();
       
-      // 注册用户 - 添加用户名作为元数据，以便触发器可以使用
+      // 注册用户 - 添加用户名和角色作为元数据，以便触发器可以使用
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
         options: {
           data: {
-            // 将用户名作为元数据传递，触发器可以使用它
-            username: data.username
+            // 将用户名和角色作为元数据传递，触发器可以使用它
+            username: data.username,
+            role: data.role as UserRole
           }
         }
       });
@@ -124,6 +129,34 @@ const RegisterForm = () => {
         fullWidth
         {...register('confirmPassword')}
       />
+      
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">用户角色</label>
+        <div className="flex space-x-4">
+          <label className="inline-flex items-center">
+            <input
+              type="radio"
+              className="form-radio text-blue-600"
+              value="user"
+              {...register('role')}
+            />
+            <span className="ml-2">普通用户</span>
+          </label>
+          
+          <label className="inline-flex items-center">
+            <input
+              type="radio"
+              className="form-radio text-blue-600"
+              value="admin"
+              {...register('role')}
+            />
+            <span className="ml-2">管理员</span>
+          </label>
+        </div>
+        {errors.role && (
+          <p className="text-red-500 text-xs mt-1">{errors.role.message}</p>
+        )}
+      </div>
       
       <div className="pt-2">
         <Button

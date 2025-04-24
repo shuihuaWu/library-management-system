@@ -1,7 +1,5 @@
-import type { NextConfig } from "next";
-
 /** @type {import('next').NextConfig} */
-const nextConfig: NextConfig = {
+const nextConfig = {
   eslint: {
     // 忽略 ESLint 错误，允许即使有错误也能构建成功
     ignoreDuringBuilds: true,
@@ -12,4 +10,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig; 

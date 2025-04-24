@@ -3,8 +3,19 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --primary-hover: #1d4ed8;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #334155;
+  --accent: #f97316;
+  --muted: #e2e8f0;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #93c5fd;
 }
 
 @theme inline {
@@ -16,15 +27,27 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0f172a;
+    --foreground: #f8fafc;
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --primary-hover: #2563eb;
+    --secondary: #1e293b;
+    --secondary-foreground: #e2e8f0;
+    --accent: #f97316;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --border: #334155;
+    --input: #1e293b;
+    --ring: #1d4ed8;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .page-container {
@@ -35,4 +58,47 @@ body {
 
 .content-container {
   flex-grow: 1;
+}
+
+/* 自定义动画 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.5s ease-out;
+}
+
+/* 卡片样式 */
+.card {
+  @apply bg-white dark:bg-secondary rounded-lg border border-border shadow-sm hover:shadow-md transition-all duration-300;
+}
+
+/* 自定义按钮样式 */
+.btn-primary {
+  @apply rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary-hover transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+}
+
+.btn-secondary {
+  @apply rounded-md bg-secondary px-4 py-2.5 text-sm font-medium text-secondary-foreground hover:bg-muted transition-colors duration-200;
+}
+
+/* 渐变标题 */
+.gradient-heading {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+}
+
+/* 自定义划分线 */
+.fancy-divider {
+  @apply h-px bg-gradient-to-r from-transparent via-muted to-transparent my-6;
 }
